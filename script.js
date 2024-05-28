@@ -12,7 +12,7 @@ Plotly.d3.csv("dataset/world-data.csv", worldData => {
         text: country,
         locationmode: "country names",
         colorscale: [
-            [0, 'rgb(242,240,247)'], [1, '#ff1100']
+            [0, 'rgb(242,240,247)'], [1, 'rgb(224,34,34']
         ],
         marker: {
             line: {
@@ -33,7 +33,7 @@ Plotly.d3.csv("dataset/world-data.csv", worldData => {
             family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
         },
         title: {
-            text: 'Percentage of the population that uses social media as a news source',
+            text: 'Percentage of world population that uses social media as a news source',
         },
         geo: {
             showframe: false,
@@ -91,12 +91,12 @@ Plotly.d3.csv("dataset/fake_content_analysis.csv", fakeSentimentData => {
 
         let sentimentTrace = {
             x: ["real news", "fake news"],
-            y: [realSentiment.cumulativeVal/realSentiment.count, fakeSentiment.cumulativeVal/fakeSentiment.count],
+            y: [-(realSentiment.cumulativeVal/realSentiment.count), -(fakeSentiment.cumulativeVal/fakeSentiment.count)],
             marker: {
-                color: ['rgb(235, 235, 235)', 'red']
+                color: ['rgb(235, 235, 235)', 'rgb(224, 34, 34)']
             },
             type: 'bar',
-            hovertemplate: "<b>%{x}</b>" + "<br>%{y}" + "<extra></extra>"
+            hovertemplate: "<b>%{x}</b>" + "<br>-%{y}" + "<extra></extra>"
         }
         
 
@@ -106,7 +106,7 @@ Plotly.d3.csv("dataset/fake_content_analysis.csv", fakeSentimentData => {
                 size: 15,
                 family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
             },
-            title: "Sentiment analysis average of fake and real news",
+            title: "Average strength of negative emotions evoked from real vs fake news",
             paper_bgcolor: '#1B1B1C',
             plot_bgcolor:  '#1B1B1C',
             hovermode: 'closest',
@@ -119,7 +119,12 @@ Plotly.d3.csv("dataset/fake_content_analysis.csv", fakeSentimentData => {
                 color: '#1B1B1C'
                 }
             },
-            height: 500
+            height: 500,
+            yaxis: {
+                tickmode: 'array',
+                tickvals: [0, 0.01, 0.02, 0.03, 0.04, 0.05],
+                ticktext: ['0', '-0.01', '-0.02', '-0.03', '-0.04', '-0.05']
+            }
         };
 
         Plotly.newPlot("sentimentGraph", [sentimentTrace], layout)
@@ -161,25 +166,11 @@ Plotly.d3.csv("dataset/facebook-fact-check 2.csv", interactionData => {
         }
     };
 
-    // let fakeNewsTrace = {
-    //     x: ["share count", "reaction count", "comment count"],
-    //     y: [fakeNews.shares, fakeNews.reactions, fakeNews.comments],
-    //     name: "Fake News",
-    //     type: "bar"
-    // }
-
-    // let realNewsTrace = {
-    //     x: ["share count", "reaction count", "comment count"],
-    //     y: [trueNews.shares, trueNews.reactions, trueNews.comments],
-    //     name: "Real News",
-    //     type: "bar"
-    // }
-
     let data = [{
         labels: ["real news", "fake news"],
         values: [trueNews.shares, fakeNews.shares],
         marker: {
-            colors: ['rgb(235, 235, 235)', 'red']
+            colors: ['rgb(235, 235, 235)', 'rgb(224, 34, 34)']
         },
         domain: {column: 0},
         title: "shares",
@@ -189,7 +180,7 @@ Plotly.d3.csv("dataset/facebook-fact-check 2.csv", interactionData => {
         labels: ["real news", "fake news"],
         values: [trueNews.reactions, fakeNews.reactions],
         marker: {
-            colors: ['rgb(235, 235, 235)', 'red']
+            colors: ['rgb(235, 235, 235)', 'rgb(224, 34, 34)']
         },
         domain: {column: 1},
         title: "reactions",
@@ -199,7 +190,7 @@ Plotly.d3.csv("dataset/facebook-fact-check 2.csv", interactionData => {
         labels: ["real news", "fake news"],
         values: [trueNews.comments, fakeNews.comments],
         marker: {
-            colors: ['rgb(235, 235, 235)', 'red']
+            colors: ['rgb(235, 235, 235)', 'rgb(224, 34, 34)']
         },
         domain: {column: 2},
         title: "comments",
@@ -213,7 +204,7 @@ Plotly.d3.csv("dataset/facebook-fact-check 2.csv", interactionData => {
             size: 15,
             // family:
         },
-        title: "Percentage amount of different interactions with fake and real news on Facebook",
+        title: "Amount of users interacting with fake and real news on Facebook",
         grid: {rows: 1, columns: 3},
         paper_bgcolor: '#1B1B1C',
         annotations: [
@@ -232,15 +223,89 @@ Plotly.d3.csv("dataset/facebook-fact-check 2.csv", interactionData => {
 });
 
 //graphing the policy data
-// Plotly.d3.csv("dataset/google_all_cleaned_new.csv", policyData => {
-//     dateData = []
-//     countData = []
-//     for( let i = 0; i <= policyData.length; i++) {
-//         if (!dateData.includes(policyData[i].Date_From)) {
-//             dateData.push(policyData[i].Date_From)
-//             countData.append[1]
-//         } elif (dateData.includes(policyData[i].Date_From)) {
+Plotly.d3.csv("dataset/aus_policy_data.csv", ausData => {
+    Plotly.d3.csv("dataset/china_policy_data.csv", chinaData => {
+        Plotly.d3.csv("dataset/eu_policy_data.csv", euData => {
+            Plotly.d3.csv("dataset/us_policy_data.csv", usData => {
 
-//         }
-//     }
-// });
+                function convertDatetime (array) {
+                    let output = []
+                    for (let i = 0; i < array.length; i++) {
+                        let date = array[i].split("/")
+                        output.push(new Date("20" + date[2], date[1], date[0]))
+                    }
+                    return output;
+                }
+
+                // removing duplicate values that has the same date, preferencing the one that has the highest value
+                // might not need this
+                function removeDups (array1, array2) {
+                    for (let i = 0; i < array1.length; i++) {
+                        if (array1[i] == array1[i+1]) {
+                            array2.splice(i);
+                            array1.splice(i);
+                            i -= 1
+                        }
+                    }
+                }
+
+                let ausDate = convertDatetime(unpack(ausData, "Date From"));
+                let ausAmount = unpack(ausData, "total_sum");
+                let chinaDate = convertDatetime(unpack(chinaData, "Date From"));
+                let chinaAmount = unpack(chinaData, "total_sum");
+                let euDate = convertDatetime(unpack(euData, "Date From"));
+                let euAmount = unpack(euData, "total_sum");
+                let usDate = convertDatetime(unpack(usData, "Date From"));
+                let usAmount = unpack(usData, "total_sum");
+
+                removeDups(ausDate, ausAmount)
+                removeDups(chinaDate, chinaAmount)
+                removeDups(euDate, euAmount)
+                removeDups(usDate, usAmount)
+                console.log(ausAmount)
+                let ausTrace = {
+                    x: ausDate,
+                    y: ausAmount,
+                    mode: "scatter",
+                    name: "Australia"
+                }
+
+                let chinaTrace = {
+                    x: chinaDate,
+                    y: chinaAmount,
+                    mode: "scatter",
+                    name: "China"
+                }
+
+                let euTrace = {
+                    x: euDate,
+                    y: euAmount,
+                    mode: "scatter",
+                    name: "EU"
+                }
+
+                let usTrace = {
+                    x: usDate,
+                    y: usAmount,
+                    mode: "scatter",
+                    name: "USA"
+                }
+
+                let layout = {
+                    title: "Cumulative amount of misinformation policies mentioned on Google",
+                    hovermode: "closest",
+                    paper_bgcolor: '#1B1B1C',
+                    plot_bgcolor:  '#1B1B1C',
+                    font: {
+                        color: 'rgb(235, 235, 235)',
+                        size: 15
+                    },
+                }
+
+                let data = [ausTrace, chinaTrace, euTrace, usTrace]
+
+                Plotly.newPlot('policyGraph', data, layout)
+            });
+        });
+    });
+});
