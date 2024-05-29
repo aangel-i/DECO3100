@@ -33,7 +33,7 @@ Plotly.d3.csv("dataset/world-data.csv", worldData => {
             family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
         },
         title: {
-            text: 'Percentage of world population that uses social media as a news source',
+            text: 'Using social media as news is worldwide<br><sup><i>Percentage of world population that uses social media as a news source in 2023</i></sup>',
         },
         geo: {
             showframe: false,
@@ -106,7 +106,7 @@ Plotly.d3.csv("dataset/fake_content_analysis.csv", fakeSentimentData => {
                 size: 15,
                 family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
             },
-            title: "Average strength of negative emotions evoked from real vs fake news",
+            title: "Fake news elicit strong negative emotions<br><sup><i>Average strength of negative emotions evoked from real vs fake news</i></sup>",
             paper_bgcolor: '#1B1B1C',
             plot_bgcolor:  '#1B1B1C',
             hovermode: 'closest',
@@ -204,7 +204,7 @@ Plotly.d3.csv("dataset/facebook-fact-check 2.csv", interactionData => {
             size: 15,
             // family:
         },
-        title: "Amount of users interacting with fake and real news on Facebook",
+        title: "Users interact more with fake news<br><sup><i>Amount of interactions with fake and real news on Facebook</i></sup>",
         grid: {rows: 1, columns: 3},
         paper_bgcolor: '#1B1B1C',
         annotations: [
@@ -316,7 +316,7 @@ Plotly.d3.csv("dataset/aus_policy_data.csv", ausData => {
                 }
                 
                 let layout = {
-                    title: "Total amount of misinformation government policies mentioned on Google",
+                    title: "An increasing interest in combating fake news <br><sup><i>Total amount of misinformation government policies mentioned on Google</i></sup>",
                     hovermode: "closest",
                     paper_bgcolor: '#1B1B1C',
                     plot_bgcolor:  '#1B1B1C',
