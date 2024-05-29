@@ -238,61 +238,85 @@ Plotly.d3.csv("dataset/aus_policy_data.csv", ausData => {
                 }
 
                 // removing duplicate values that has the same date, preferencing the one that has the highest value
-                // might not need this
                 function removeDups (array1, array2) {
-                    for (let i = 0; i < array1.length; i++) {
-                        if (array1[i] == array1[i+1]) {
-                            array2.splice(i);
-                            array1.splice(i);
-                            i -= 1
-                        }
-                    }
+                    outArray1 = [array1.at(-1)];    // date array
+                    outArray2 = [array2.at(-1)];    // value array
+                    for (let i = array1.length - 2; i >= 0; i--) {
+                        // console.log(i, array1.at(i+1), (array1.at(i)));
+                        if (array1.at(i+1) != array1.at(i)) {
+                            outArray1.unshift(array1.at(i));
+                            outArray2.unshift(array2.at(i));
+                        };
+                    };
+                    return [outArray1, outArray2];
                 }
 
-                let ausDate = convertDatetime(unpack(ausData, "Date From"));
-                let ausAmount = unpack(ausData, "total_sum");
-                let chinaDate = convertDatetime(unpack(chinaData, "Date From"));
-                let chinaAmount = unpack(chinaData, "total_sum");
-                let euDate = convertDatetime(unpack(euData, "Date From"));
-                let euAmount = unpack(euData, "total_sum");
-                let usDate = convertDatetime(unpack(usData, "Date From"));
-                let usAmount = unpack(usData, "total_sum");
+                let ausDataClean = removeDups(unpack(ausData, "Date From"), unpack(ausData, "total_sum"));
+                let chinaDataClean = removeDups(unpack(chinaData, "Date From"), unpack(chinaData, "total_sum"));
+                let euDataClean = removeDups(unpack(euData, "Date From"), unpack(euData, "total_sum"));
+                let usDataClean = removeDups(unpack(usData, "Date From"), unpack(usData, "total_sum"));
+            
 
-                removeDups(ausDate, ausAmount)
-                removeDups(chinaDate, chinaAmount)
-                removeDups(euDate, euAmount)
-                removeDups(usDate, usAmount)
-                console.log(ausAmount)
+                let ausDate = convertDatetime(ausDataClean[0])
+                let ausAmount = ausDataClean[1]
+                let chinaDate = convertDatetime(chinaDataClean[0])
+                let chinaAmount = chinaDataClean[1]
+                let euDate = convertDatetime(euDataClean[0])
+                let euAmount = euDataClean[1]
+                let usDate = convertDatetime(usDataClean[0])
+                let usAmount = usDataClean[1]
+
+
+                // let a = [1, 2, 2, 3, 4, 4, 4];    // output = 1, 2, 3, 4
+                // let b = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];  // output = a, b, c, e
+                // console.log(removeDups(a, b));
+
                 let ausTrace = {
                     x: ausDate,
                     y: ausAmount,
-                    mode: "scatter",
-                    name: "Australia"
+                    mode: "line",
+                    name: "Australia",
+                    marker: {
+                        color: "rgb(224, 34, 34)"
+                    },
+                    hovertemplate: "<b>Australia</b>" + "<br>%{x}: %{y}" + "<extra></extra>"
                 }
 
                 let chinaTrace = {
                     x: chinaDate,
                     y: chinaAmount,
-                    mode: "scatter",
-                    name: "China"
+                    mode: "line",
+                    name: "China",
+                    marker: {
+                        color: "rgb(230, 94, 94)"
+                    },
+                    hovertemplate: "<b>China</b>" + "<br>%{x}: %{y}" + "<extra></extra>"
                 }
 
                 let euTrace = {
                     x: euDate,
                     y: euAmount,
-                    mode: "scatter",
-                    name: "EU"
+                    mode: "line",
+                    name: "EU",
+                    marker: {
+                        color: "rgb(235, 164, 164)"
+                    },
+                    hovertemplate: "<b>EU</b>" + "<br>%{x}: %{y}" + "<extra></extra>"
                 }
 
                 let usTrace = {
                     x: usDate,
                     y: usAmount,
-                    mode: "scatter",
-                    name: "USA"
+                    mode: "line",
+                    name: "USA",
+                    marker: {
+                        color: "rgb(235, 209, 209)"
+                    },
+                    hovertemplate: "<b>USA</b>" + "<br>%{x}: %{y}" + "<extra></extra>"
                 }
-
+                
                 let layout = {
-                    title: "Cumulative amount of misinformation policies mentioned on Google",
+                    title: "Total amount of misinformation government policies mentioned on Google",
                     hovermode: "closest",
                     paper_bgcolor: '#1B1B1C',
                     plot_bgcolor:  '#1B1B1C',
@@ -300,7 +324,62 @@ Plotly.d3.csv("dataset/aus_policy_data.csv", ausData => {
                         color: 'rgb(235, 235, 235)',
                         size: 15
                     },
+                    annotations: [
+                        {
+                            x: "2016-12-04",
+                            y: 0,
+                            ax: 0,
+                            ay: -120,
+                            arrowcolor: "white",
+                            font: {
+                                color: "rgb(27, 27, 28",
+                                size: 10
+                            },
+                            bgcolor: "rgb(235, 235, 235)",
+                            text: "Pizzagate Shooting Scandal"
+                        },
+                        {
+                            x: "2021-01-06",
+                            y: 0,
+                            ax: 0,
+                            ay: -200,
+                            arrowcolor: "white",
+                            text: "Capitol Riot",
+                            font: {
+                                color: "rgb(27, 27, 28",
+                                size: 10
+                            },
+                            bgcolor: "rgb(235, 235, 235)",
+                        },
+                        {
+                            x: "2016-06-23",
+                            y: 0,
+                            ax: 0,
+                            ay: -70,
+                            arrowcolor: "white",
+                            text: "Brexit Referrendum",
+                            font: {
+                                color: "rgb(27, 27, 28",
+                                size: 10
+                            },
+                            bgcolor: "rgb(235, 235, 235)",
+                        },
+                        {
+                            x: "2020-01-30",
+                            y: 0,
+                            ax: 0,
+                            ay: -150,
+                            arrowcolor: "white",
+                            text: "Covid-19 Pandemic",
+                            font: {
+                                color: "rgb(27, 27, 28",
+                                size: 10
+                            },
+                            bgcolor: "rgb(235, 235, 235)",
+                        }
+                    ],
                 }
+
 
                 let data = [ausTrace, chinaTrace, euTrace, usTrace]
 
