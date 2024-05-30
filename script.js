@@ -12,7 +12,7 @@ Plotly.d3.csv("dataset/world-data.csv", worldData => {
         text: country,
         locationmode: "country names",
         colorscale: [
-            [0, 'rgb(242,240,247)'], [1, 'rgb(224,34,34']
+            [0, 'rgb(242,240,247)'], [1, 'rgb(224,34,34']   // changing colorscale to suit website theme
         ],
         marker: {
             line: {
@@ -23,7 +23,7 @@ Plotly.d3.csv("dataset/world-data.csv", worldData => {
         colorbar: {
             title: "Pecentage of population",
         },
-        hovertemplate: "<b>%{text}</b>" + "<br>%{z}%" + "<extra></extra>"
+        hovertemplate: "<b>%{text}</b>" + "<br>%{z}%" + "<extra></extra>" // when hovered users can see percentage value for the selected country
     }];
 
     let layout = {
@@ -46,7 +46,7 @@ Plotly.d3.csv("dataset/world-data.csv", worldData => {
         paper_bgcolor: '#1B1B1C',
         width: 1000,
         height: 800,
-        dragmode: false,
+        dragmode: false,    //removed drag as users may find resetting the view confusing, thus impacting on usability and user experience
         hoverlabel: {
             bgcolor: "rgb(235, 235, 235)",
             bordercolor: "#1B1B1C",
@@ -64,6 +64,7 @@ Plotly.d3.csv("dataset/world-data.csv", worldData => {
 // graphing sentiment data
 Plotly.d3.csv("dataset/fake_content_analysis.csv", fakeSentimentData => {
     Plotly.d3.csv("dataset/real_content_analysis.csv", realSentimentData => {
+        // the objects will store cumulative value and count value as they are integral to find the average score
         let fakeSentiment = {
             cumulativeVal: 0,
             count: 0
@@ -73,29 +74,30 @@ Plotly.d3.csv("dataset/fake_content_analysis.csv", fakeSentimentData => {
             count: 0
         };
 
+        // iterating through each sentiment data csv and add it to the fake or real news cumulative value and count. I wrote this code with the aid of my tutor
         for (let i = 0; i < fakeSentimentData.length; i++) {
             fakeSentiment.cumulativeVal += Number(fakeSentimentData[i].compound)
             fakeSentiment.count += 1
-            if (i == 0) {
-                fake =  Number(fakeSentimentData[i].compound)
-            }
+            // if (i == 0) {
+            //     fake =  Number(fakeSentimentData[i].compound)
+            // }
         };
         for (let i = 0; i < realSentimentData.length; i++) {
             realSentiment.cumulativeVal += Number(realSentimentData[i].compound)
             realSentiment.count += 1
-            if (i == 0) {
-                real =  Number(realSentimentData[i].compound)
-            }
+            // if (i == 0) {
+            //     real =  Number(realSentimentData[i].compound)
+            // }
         };
 
 
         let sentimentTrace = {
             x: ["real news", "fake news"],
-            y: [-(realSentiment.cumulativeVal/realSentiment.count), -(fakeSentiment.cumulativeVal/fakeSentiment.count)],
+            y: [-(realSentiment.cumulativeVal/realSentiment.count), -(fakeSentiment.cumulativeVal/fakeSentiment.count)], // conducting average based on the collected objects attributes
             marker: {
-                color: ['rgb(235, 235, 235)', 'rgb(224, 34, 34)']
+                color: ['rgb(235, 235, 235)', 'rgb(224, 34, 34)']   // colour to differentiate fake vs real news; also to conform to design colour pallette
             },
-            type: 'bar',
+            type: 'bar',    // bar chart for easy comparison between the sentiment analysis values for real vs fake news
             hovertemplate: "<b>%{x}</b>" + "<br>-%{y}" + "<extra></extra>"
         }
         
@@ -135,7 +137,7 @@ Plotly.d3.csv("dataset/fake_content_analysis.csv", fakeSentimentData => {
 
 // graphing the interaction data
 Plotly.d3.csv("dataset/facebook-fact-check 2.csv", interactionData => {
-
+    // shares, reactions, comments counts will be stored in trueNews or fakeNews objects
     let trueNews = {
         shares: 0,
         reactions: 0,
@@ -150,6 +152,7 @@ Plotly.d3.csv("dataset/facebook-fact-check 2.csv", interactionData => {
         count: 0
     };
 
+    // add the count into running total stored in the trueNews/fakeNews objects above. To ensure validity, I will collect 500 trueNews and fakeNews, with a total of 1000. Code snippet was written with the aid of my tutor
     for (let i = 0; i < interactionData.length; i++) {
         if (interactionData[i].Rating == "mostly true" && trueNews.count < 500) {
             trueNews.shares += Number(interactionData[i].share_count)
@@ -168,6 +171,7 @@ Plotly.d3.csv("dataset/facebook-fact-check 2.csv", interactionData => {
         }
     };
 
+    // same attributes from trueNews and fakeNews will be compared together using pie chart
     let data = [{
         labels: ["real news", "fake news"],
         values: [trueNews.shares, fakeNews.shares],
@@ -229,7 +233,7 @@ Plotly.d3.csv("dataset/aus_policy_data.csv", ausData => {
                     return output;
                 }
 
-                // removing duplicate values that has the same date, preferencing the one that has the highest value
+                // removing duplicate values that has the same date, preferencing the one that has the highest value. This ensures that when hovered the data point does not show two values for a given date.
                 function removeDups (array1, array2) {
                     outArray1 = [array1.at(-1)];    // date array
                     outArray2 = [array2.at(-1)];    // value array
@@ -243,12 +247,13 @@ Plotly.d3.csv("dataset/aus_policy_data.csv", ausData => {
                     return [outArray1, outArray2];
                 }
 
+                // get clean data that removes duplicates
                 let ausDataClean = removeDups(unpack(ausData, "Date From"), unpack(ausData, "total_sum"));
                 let chinaDataClean = removeDups(unpack(chinaData, "Date From"), unpack(chinaData, "total_sum"));
                 let euDataClean = removeDups(unpack(euData, "Date From"), unpack(euData, "total_sum"));
                 let usDataClean = removeDups(unpack(usData, "Date From"), unpack(usData, "total_sum"));
             
-
+                // as removeDups() returns two arrays, the first index being the date and the second is the cumulative amount, separate the two and assign them to variables to ensure easy usage with Plotly
                 let ausDate = convertDatetime(ausDataClean[0])
                 let ausAmount = ausDataClean[1]
                 let chinaDate = convertDatetime(chinaDataClean[0])
@@ -258,18 +263,14 @@ Plotly.d3.csv("dataset/aus_policy_data.csv", ausData => {
                 let usDate = convertDatetime(usDataClean[0])
                 let usAmount = usDataClean[1]
 
-
-                // let a = [1, 2, 2, 3, 4, 4, 4];    // output = 1, 2, 3, 4
-                // let b = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];  // output = a, b, c, e
-                // console.log(removeDups(a, b));
-
+                // line chart suitable to show change in time
                 let ausTrace = {
                     x: ausDate,
                     y: ausAmount,
                     mode: "line",
                     name: "Australia",
                     marker: {
-                        color: "rgb(224, 34, 34)"
+                        color: "rgb(224, 34, 34)"   // diff colours to still keep with colour scheme, but also to differentiate the different traces
                     },
                     hovertemplate: "<b>Australia</b>" + "<br>%{x}: %{y}" + "<extra></extra>"
                 }
@@ -316,7 +317,7 @@ Plotly.d3.csv("dataset/aus_policy_data.csv", ausData => {
                         color: 'rgb(235, 235, 235)',
                         size: 15
                     },
-                    annotations: [
+                    annotations: [  // annotations to provide context to the data. Make sure annotaion box does not overlap with the line graph
                         {
                             x: "2016-12-04",
                             y: 0,

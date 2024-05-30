@@ -1,0 +1,32 @@
+This file will explain how data preparation was done.
+All preparation were done on Excel unless stated otherwise.
+To see further comments regarding preparation of the dataset using JS or Python, open up the relevant file.
+For Plotly transformations, see the JS file.
+
+
+-- CHOROPLETH GRAPH --
+Original dataset from https://www.statista.com/statistics/718019/social-media-news-source/
+No data preparation needed as the original dataset was immediately usable.
+
+
+-- EMOTIONS GRAPH --
+Original dataset from https://www.kaggle.com/datasets/rmisra/politifact-fact-check-dataset
+Sentiment analysis tool: https://github.com/cjhutto/vaderSentiment?referral=top-free-sentiment-analysis-tools-apis-and-open-source-models
+As the JSON file was not properly formatted, I used the Python code from https://stackoverflow.com/questions/60830724/add-a-comma-after-a-curly-brace-for-json-format to format it correctly.
+From the clean JSON file I gathered text content JSON attribute based on whether the verdict is fake or true. This will create two files, one that has the writtent content for fake news and the other written content for real news.
+Using the Vader Sentiment Analysis, I open up the files and a conduct analysis for each data point.
+The analysis result, stored as an array in the Python code, were converted to JSON files.
+Using https://www.convertcsv.com/json-to-csv.htm, I converted the analysed JSON files into csv to be used for Plotly.
+
+
+
+-- INTERACTIONS GRAPH --
+Original dataset from https://www.kaggle.com/datasets/mrisdal/fact-checking-facebook-politics-pages
+No preparation was done. Further refinements of the data were made in JS to make it usable for Plotly.
+
+
+-- POLICY GRAPH --
+Original dataset from https://www.idpo.org.au/@international-digital-policy-observatory/policy-documents-misinformation
+I separated the different countries into their own CSV file (using filter function on Excel), and then transform it such that the rows are in ascending order based on the date.
+I then did a cumulative count by using the sum function (sum(prev_cell + 1)) on a now column.
+In JS I deleted data points that had the same dates and deleted the ones that has a lower cumulative count, as the largest cumulative count will already factor those previous data points already.
