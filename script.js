@@ -123,7 +123,9 @@ Plotly.d3.csv("dataset/fake_content_analysis.csv", fakeSentimentData => {
             yaxis: {
                 tickmode: 'array',
                 tickvals: [0, 0.01, 0.02, 0.03, 0.04, 0.05],
-                ticktext: ['0', '-0.01', '-0.02', '-0.03', '-0.04', '-0.05']
+                ticktext: ['0 (weaker)', '-0.01', '-0.02', '-0.03', '-0.04 (stronger)', '-0.05'],
+                automargin: true,
+                title: "sentiment analysis score"
             }
         };
 
@@ -175,7 +177,7 @@ Plotly.d3.csv("dataset/facebook-fact-check 2.csv", interactionData => {
         domain: {column: 0},
         title: "shares",
         type: "pie",
-        hoverinfo: 'skip'
+        name: ""
     }, {
         labels: ["real news", "fake news"],
         values: [trueNews.reactions, fakeNews.reactions],
@@ -185,7 +187,7 @@ Plotly.d3.csv("dataset/facebook-fact-check 2.csv", interactionData => {
         domain: {column: 1},
         title: "reactions",
         type: "pie",
-        hoverinfo: 'skip'
+        name: ""
     }, {
         labels: ["real news", "fake news"],
         values: [trueNews.comments, fakeNews.comments],
@@ -195,28 +197,17 @@ Plotly.d3.csv("dataset/facebook-fact-check 2.csv", interactionData => {
         domain: {column: 2},
         title: "comments",
         type: "pie",
-        hoverinfo: 'skip'
+        name: ""
     }, ]
 
     let layout = {
         font: {
             color: 'rgb(235, 235, 235)',
             size: 15,
-            // family:
         },
         title: "Users interact more with fake news<br><sup><i>Amount of interactions with fake and real news on Facebook</i></sup>",
         grid: {rows: 1, columns: 3},
         paper_bgcolor: '#1B1B1C',
-        annotations: [
-            {
-                text: "sdf sdfjkhs sfhsa ks safh ",
-                showarrow: false,
-                xref: 'paper',
-                yref: 'paper',
-                x: 50,
-                y: 50
-            }
-        ],
     };
 
     Plotly.newPlot("interactionGraph", data, layout);
@@ -228,6 +219,7 @@ Plotly.d3.csv("dataset/aus_policy_data.csv", ausData => {
         Plotly.d3.csv("dataset/eu_policy_data.csv", euData => {
             Plotly.d3.csv("dataset/us_policy_data.csv", usData => {
 
+                // Used to change date string from csv into Date object in an array
                 function convertDatetime (array) {
                     let output = []
                     for (let i = 0; i < array.length; i++) {
@@ -316,7 +308,7 @@ Plotly.d3.csv("dataset/aus_policy_data.csv", ausData => {
                 }
                 
                 let layout = {
-                    title: "An increasing interest in combating fake news <br><sup><i>Total amount of misinformation government policies mentioned on Google</i></sup>",
+                    title: "An increasing interest in combating fake news <br><sup><i>Total amount of misinformation policies mentioned on Google</i></sup>",
                     hovermode: "closest",
                     paper_bgcolor: '#1B1B1C',
                     plot_bgcolor:  '#1B1B1C',
