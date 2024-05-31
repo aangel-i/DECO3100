@@ -15,7 +15,7 @@ Sentiment analysis tool: https://github.com/cjhutto/vaderSentiment?referral=top-
 As the JSON file was not properly formatted, I used the Python code from https://stackoverflow.com/questions/60830724/add-a-comma-after-a-curly-brace-for-json-format to format it correctly.
 From the clean JSON file I gathered text content JSON attribute based on whether the verdict is fake or true. This will create two files, one that has the writtent content for fake news and the other written content for real news.
 Using the Vader Sentiment Analysis, I open up the files and a conduct analysis for each data point.
-The analysis result, stored as an array in the Python code, were converted to JSON files.
+The analysis results, stored as an array in the Python code, were converted to JSON files.
 Using https://www.convertcsv.com/json-to-csv.htm, I converted the analysed JSON files into csv to be used for Plotly.
 
 

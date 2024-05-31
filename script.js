@@ -1,3 +1,5 @@
+// NOTE: code is tested on 1440 x 900 screen size. 
+
 const unpack = (data, key) => data.map(row => row[key]);
 
 // graphing the choropleth graph
@@ -108,7 +110,7 @@ Plotly.d3.csv("dataset/fake_content_analysis.csv", fakeSentimentData => {
                 size: 15,
                 family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
             },
-            title: "Fake news elicit strong negative emotions<br><sup><i>Average strength of negative emotions evoked from real vs fake news</i></sup>",
+            title: "Fake news elicits strong negative emotions<br><sup><i>Average strength of negative emotions evoked from real vs fake news</i></sup>",
             paper_bgcolor: '#1B1B1C',
             plot_bgcolor:  '#1B1B1C',
             hovermode: 'closest',
@@ -127,7 +129,7 @@ Plotly.d3.csv("dataset/fake_content_analysis.csv", fakeSentimentData => {
                 tickvals: [0, 0.01, 0.02, 0.03, 0.04, 0.05],
                 ticktext: ['0 (weaker)', '-0.01', '-0.02', '-0.03', '-0.04 (stronger)', '-0.05'],
                 automargin: true,
-                title: "sentiment analysis score"
+                title: "score"
             }
         };
 
@@ -309,7 +311,7 @@ Plotly.d3.csv("dataset/aus_policy_data.csv", ausData => {
                 }
                 
                 let layout = {
-                    title: "An increasing interest in combating fake news <br><sup><i>Total amount of misinformation policies mentioned on Google</i></sup>",
+                    title: "An increasing interest in combating fake news <br><sup><i>Total amount of misinformation laws, bills and regulations mentioned on Google</i></sup>",
                     hovermode: "closest",
                     paper_bgcolor: '#1B1B1C',
                     plot_bgcolor:  '#1B1B1C',
